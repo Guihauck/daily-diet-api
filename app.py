@@ -27,5 +27,22 @@ def create_snack():
     
     return jsonify({"message": "Erro ao cadastrar a refeição!"}), 400
 
+@app.route("/snack/<int:id_snack>", methods=['GET'])
+def read_snack(id_snack):
+    snack = Snack.query.get(id_snack)
+
+    if snack:
+        return jsonify({
+            "message": "Refeição retornada com sucesso!",
+            "snack": {
+                "nome": snack.name,
+                "descrição": snack.description,
+                "hora": str(snack.time),
+                "data": str(snack.date),
+                "incluso": str(snack.included)
+            }
+        })
+    
+    return jsonify({"message": "Refeição não encontrada"}), 404
 if __name__ == "__main__":
     app.run(debug=True)
