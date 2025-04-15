@@ -44,5 +44,22 @@ def read_snack(id_snack):
         })
     
     return jsonify({"message": "Refeição não encontrada"}), 404
+
+@app.route("/snack/<int:id_snack>", methods=['PUT'])
+def update_snack(id_snack):
+    data = request.json
+    snack = Snack.query.get(id_snack)
+
+    if snack:
+        snack.name = data.get("name")
+        snack.description = data.get("description")
+        snack.time = datetime.strptime(data.get("time"), "%H:%M:%S").time()
+        snack.date = datetime.strptime(data.get("date"), "%Y-%m-%d").date()
+        snack.included = data.get("included")
+        db.session.commit()
+        return jsonify({"message": f"A refeição ID: {id_snack} foi alterada!"})
+    
+    return jsonify({"message": "A refeição não foi encontrada!"})
+
 if __name__ == "__main__":
     app.run(debug=True)
