@@ -39,11 +39,33 @@ def read_snack(id_snack):
                 "descrição": snack.description,
                 "hora": str(snack.time),
                 "data": str(snack.date),
-                "incluso": str(snack.included)
+                "incluso": snack.included
             }
         })
     
     return jsonify({"message": "Refeição não encontrada"}), 404
+
+@app.route("/snack/search/all", methods=['GET'])
+def snack_read_all():
+    snacks = Snack.query.all()
+
+    if not snacks:
+        return jsonify({"message": "Lista de refeições não encontradas!"}), 404
+    
+    snack_list = list()
+    for snack in snacks:
+        snack_list.append({
+            "nome": snack.name,
+            "descrição": snack.description,
+            "hora": str(snack.time),
+            "data": str(snack.date),
+            "incluso": snack.included
+        })
+
+    return jsonify({
+        "message": "Lista de refeições cadastradas:",
+        "snack": snack_list
+    })
 
 @app.route("/snack/<int:id_snack>", methods=['PUT'])
 def update_snack(id_snack):
@@ -59,7 +81,7 @@ def update_snack(id_snack):
         db.session.commit()
         return jsonify({"message": f"A refeição ID: {id_snack} foi alterada!"})
     
-    return jsonify({"message": "A refeição não foi encontrada!"})
+    return jsonify({"message": "A refeição não foi encontrada!"}), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
