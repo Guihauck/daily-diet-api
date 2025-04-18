@@ -1,0 +1,6 @@
+DB_USER=guihauck.1998
+DB_PASSWORD=Hauck.1998
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=daily-diet
+SECRET_KEY=your_secret_key

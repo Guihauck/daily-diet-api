@@ -1,11 +1,23 @@
+import os
+from urllib.parse import quote_plus
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from models.snack import Snack
 from database import db
 from datetime import datetime
 
+load_dotenv("credentials.env.app")
+
+DB_USER = quote_plus(os.getenv("DB_USER"))
+DB_PASSWORD = quote_plus(os.getenv("DB_PASSWORD"))
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+SECRET_KEY = os.getenv("SECRET_KEY")
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = (f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 db.init_app(app)
 
 @app.route("/snack", methods=['POST'])
